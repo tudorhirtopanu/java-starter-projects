@@ -2,52 +2,65 @@ import java.util.Scanner;
 
 public class TemperatureConverter {
 	
-	public static double convertTemp(double temp, String conversion) {
-		
-		double convertedTemp = 0;
+	// Convert temperature based on conversion unit
+	public static double convertTemp(double temp, char conversion) {
 		
 		switch(conversion) {
-			case "C":
-				convertedTemp = (temp - 32)*5/9;
-				break;
-			case "F":
-				convertedTemp = (temp * 9.0 / 5.0) + 32;
+			case 'C':
+				return (temp - 32)*5/9;
+			case 'F':
+				return (temp * 9.0 / 5.0) + 32;
 		}
 		
-		return convertedTemp;
+		return Double.NaN;
+		
 	}
 
 	public static void main(String[] args) {
 		
-		Scanner scanner = new Scanner(System.in);
-		
-		int input;
-		String conversionUnit;
-		
-		System.out.println("Convert into Celsius (C) or Farenheit (F)?");
-		
-		conversionUnit = scanner.nextLine();
-		
-		System.out.println("Enter a number");
-		
-		input = scanner.nextInt();
-		
-		if(input<=0) {
+		try (Scanner scanner = new Scanner(System.in)){
 			
-			while(input<0) {
+			char conversionUnit;
+			int input;		
+			
+			System.out.println("Convert into Celsius (C) or Fahrenheit (F)?");
+			
+			// Loops until valid C or F is entered
+			while (true) {
 				
-				System.out.println("Enter a valid number (=>0)");
+				conversionUnit = scanner.next().charAt(0);
 				
-				input = scanner.nextInt();
+				// Converts character to upper case
+				conversionUnit = Character.toUpperCase(conversionUnit);
+				
+				if (conversionUnit == 'C' || conversionUnit == 'F') {
+					break;
+					
+				} else {
+					System.out.println("Please enter valid unit ('C' or 'F')");
+				}
 				
 			}
 			
-			double ans = convertTemp(input, conversionUnit);
-		    System.out.println("Converted temperature: " + ans);
-		    
-		} else {
-			double ans = convertTemp(input, conversionUnit);
-		    System.out.println("Converted temperature: " + ans);
+			System.out.println("Enter a number");
+			
+			// Loops until an integer is entered
+			while (true) {
+				if (scanner.hasNextInt()) {
+					
+					input = scanner.nextInt();
+					
+					double ans = convertTemp(input, conversionUnit);
+				    System.out.println("Converted temperature: " + ans+" °"+conversionUnit);
+					
+					break; 
+					
+				} else {
+					System.out.println("Enter a valid number");
+					scanner.next();
+				}
+			}
+			
 		}
 		
 	}
